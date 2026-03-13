@@ -32,6 +32,7 @@ const PORT = process.env.PORT
 app.use(express.json()) //it tells express that If the client sends JSON data in the request body, convert it into a JavaScript object so I can use it
 app.use(cookieParser())
 app.use("/api/auth" , authRoutes)
+app.use("api/users" , userRoutes)
 
 
 

@@ -14,7 +14,7 @@ export async function signup(req,resp){
             return resp.status(400).json({message: "All fields are required"})
 
         if(password.length<8) 
-            return resp.status(400).json({message: "Password must be atleast six characters"})
+            return resp.status(400).json({message: "Password must be atleast eight characters"})
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  //emailRegex is a regular expression (RegEx) used to validate whether a string is in proper email format.
 
@@ -26,7 +26,7 @@ export async function signup(req,resp){
 // No multiple @
 
         if (!emailRegex.test(email)) {
-            return res.status(400).json({ message: "Invalid email format" });
+            return resp.status(400).json({ message: "Invalid email format" });
 }
 
         const existingUser = await User.findOne({email})
@@ -120,16 +120,20 @@ export async function logout(req,resp){
 
 export async function onboard(req, resp){
     console.log(req.user) //yeh req.user humne protectRoute middleware me set kiya tha
-    const userId = req.user._id
+    
+    
+    try {
+
+     const userId = req.user._id
     const {fullName , bio , nativeLanguage , learningLanguage , location} = req.body
 
-    const requiredFields = [
+        const requiredFields = [
         "fullName",
         "bio", //with "" they are field names which the validator exprects but if you dont write "" it becomes values 
         "nativeLanguage",
         "learningLanguage",
         "location",
-]
+    ]
 
 const missingFields = validateFields(req.body , requiredFields) 
 
@@ -162,16 +166,20 @@ return resp.status(400).json({
     if(!updatedUser) 
         return resp.status(400).json({message: "User not found"})
 
-
+    try {
+            await upsertStreamUser({
+        id: updatedUser._id.toString(),
+        name : updatedUser.fullName,
+        image: updatedUser.profilePic || "",
+    })
+    console.log(`Stream user updated after onboarding for ${updateUser.fullName}`)
+    } catch (streamError) {
+        console.log("Error updating stream user while onboarding" , streamError.message)
+    }
 
     resp.status(200).json({success : true , user: updatedUser})
+ 
 
-
-    //TODO : to update the user info in stream
-        
-
-    try {
-        
     } catch (error) {
         console.log("Onboaring error" , error)
         resp.status(500).json({message : "Internal server error"})
