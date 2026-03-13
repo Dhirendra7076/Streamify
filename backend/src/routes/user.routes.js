@@ -9,4 +9,6 @@ router.use(protectRoute)
 router.get("/" ,protectRoute, getRecommendedUsers) //instead of writing protectRoute in every route just do the above one
 router.get("/friends" ,protectRoute , getMyFriends)
 
+router.post("/friend-request/:id" ,sendFriendRequest) //this too protected becuase of above line
+
 export default router;

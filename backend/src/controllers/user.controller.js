@@ -28,6 +28,6 @@ export async function getMyFriends(req, resp) {
         resp.json(user.friends)
     } catch (error) {
         console.error("Error in getMyFriends controller " , error.message)
-        resp.status(500).json("Internal Server Error")
+        resp.status(500).json("Internal Server Error")      
     }
 }
