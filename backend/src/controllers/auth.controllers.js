@@ -119,11 +119,43 @@ export async function logout(req,resp){
 
 export async function onboard(req, resp){
     console.log(req.user) //yeh req.user humne protectRoute middleware me set kiya tha
+    const userId = req.user._id
+    const {fullName , bio , nativeLanguage , learningLanguage , location} = req.body
+
+    if(!fullName || !bio || !nativeLanguage || !learningLanguage || !location)
+        return resp.status(400).json({
+                                        message: "All fields are required", 
+                                        missingFields: [ //this tells what fields are missing
+                                            !fullName && fullName,
+                                            !bio && bio,
+                                            !nativeLanguage && nativeLanguage,
+                                            !learningLanguage && learningLanguage,
+                                            !location && location,
+                                        ],
+                                    })
+
+    const updatedUser = await User.findByIdAndUpdate(userId , {
+       // fullName , bio , location , .... instead of typing all this out you write the following 
+       ...req.body,
+       isOnboarded: true,
+    } , {new:true})//how over new to know what it does
+
+    if(!updatedUser) 
+        return resp.status(400).json({message: "User not found"})
+
+
+
+    resp.status(200).json({success : true , user: updatedUser})
+
+
+    //TODO : to update the user info in stream
+        
 
     try {
         
     } catch (error) {
-        
+        console.log("Onboaring error" , error)
+        resp.status(500).json({message : "Internal server error"})
     }
 }
 
