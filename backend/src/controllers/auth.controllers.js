@@ -124,34 +124,34 @@ export async function onboard(req, resp){
     const {fullName , bio , nativeLanguage , learningLanguage , location} = req.body
 
     const requiredFields = [
-        fullName,
-        bio,
-        nativeLanguage,
-        learningLanguage,
-        location,
+        "fullName",
+        "bio", //with "" they are field names which the validator exprects but if you dont write "" it becomes values 
+        "nativeLanguage",
+        "learningLanguage",
+        "location",
 ]
 
-const missingFields = validateFields(req.body , requiredFields)
+const missingFields = validateFields(req.body , requiredFields) 
 
-if(missingFields>0)
+if(missingFields.length>0)
 return resp.status(400).json({
     message: "All fields are required" , 
     missingFields
 })
 
 
-    if(!fullName || !bio || !nativeLanguage || !learningLanguage || !location)
-        return resp.status(400).json({
-                                        message: "All fields are required", 
-                                        missingFields: [ //this tells what fields are missing
-                                            !fullName && fullName,
-                                            !bio && bio,
-                                            !nativeLanguage && nativeLanguage,
-                                            !learningLanguage && learningLanguage,
-                                            !location && location,
-                                        ].filter(Boolean) //to get only the true values
-                                         ,
-                                    })
+    // if(!fullName || !bio || !nativeLanguage || !learningLanguage || !location)
+    //     return resp.status(400).json({
+    //                                     message: "All fields are required", 
+    //                                     missingFields: [ //this tells what fields are missing
+    //                                         !fullName && fullName,
+    //                                         !bio && bio,
+    //                                         !nativeLanguage && nativeLanguage,
+    //                                         !learningLanguage && learningLanguage,
+    //                                         !location && location,
+    //                                     ].filter(Boolean) //to get only the true values
+    //                                      ,
+    //                                 })
 
     const updatedUser = await User.findByIdAndUpdate(userId , {
        // fullName , bio , location , .... instead of typing all this out you write the following 
