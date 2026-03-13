@@ -4,6 +4,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import authRoutes from './routes/auth.routes.js' //" Import the default export from this file and store it in a variable called authRoutes."
+import userRoutes from './routes/user.routes.js'
 import { connectDB } from './lib/db.js';
 import mongoose from 'mongoose';
 //You could actually name it anything:
