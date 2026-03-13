@@ -118,7 +118,13 @@ export async function logout(req,resp){
 }
 
 export async function onboard(req, resp){
-    
+    console.log(req.user) //yeh req.user humne protectRoute middleware me set kiya tha
+
+    try {
+        
+    } catch (error) {
+        
+    }
 }
 
 //async
