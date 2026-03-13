@@ -1,6 +1,7 @@
 import { upsertStreamUser } from "../lib/stream.js";
 import User from "../models/User.js";
 import jwt from 'jsonwebtoken'
+import { validateFields } from "../utils/validateFields.js";
 
 
 export async function signup(req,resp){
@@ -122,6 +123,23 @@ export async function onboard(req, resp){
     const userId = req.user._id
     const {fullName , bio , nativeLanguage , learningLanguage , location} = req.body
 
+    const requiredFields = [
+        fullName,
+        bio,
+        nativeLanguage,
+        learningLanguage,
+        location,
+]
+
+const missingFields = validateFields(req.body , requiredFields)
+
+if(missingFields>0)
+return resp.status(400).json({
+    message: "All fields are required" , 
+    missingFields
+})
+
+
     if(!fullName || !bio || !nativeLanguage || !learningLanguage || !location)
         return resp.status(400).json({
                                         message: "All fields are required", 
@@ -131,7 +149,8 @@ export async function onboard(req, resp){
                                             !nativeLanguage && nativeLanguage,
                                             !learningLanguage && learningLanguage,
                                             !location && location,
-                                        ],
+                                        ].filter(Boolean) //to get only the true values
+                                         ,
                                     })
 
     const updatedUser = await User.findByIdAndUpdate(userId , {
