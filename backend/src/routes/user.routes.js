@@ -11,5 +11,6 @@ router.get("/" ,protectRoute, getRecommendedUsers) //instead of writing protectR
 router.get("/friends" ,protectRoute , getMyFriends)
 
 router.post("/friend-request/:id" ,sendFriendRequest) //this too protected becuase of above line
+router.put("/friend-request/:id/accept" , acceptFriendRequest);
 
 export default router;

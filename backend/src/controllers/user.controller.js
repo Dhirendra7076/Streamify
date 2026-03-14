@@ -69,6 +69,22 @@ export async function sendFriendRequest(req , resp) {
     } catch (error) {
         console.error("Error in sendFriendRequest Controller" , error.message)
         resp.status(500).json({message : "Internal server error"})
+    }   
+}
+
+
+export async function acceptFriendRequest(req,resp) {
+    try {
+        const {id : requestId} = req.params
+        const friendRequest = await FriendRequest.findById(requestId)
+
+        if(!friendRequest)
+            return resp.status(404).json({message : "Friend request not found"})
+
+
+        //Verify the current user is the recipient
+        
+    } catch (error) {
+        
     }
-    
 }
