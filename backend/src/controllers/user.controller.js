@@ -83,7 +83,22 @@ export async function acceptFriendRequest(req,resp) {
 
 
         //Verify the current user is the recipient
-        
+        if(friendRequest.recipient.toString() !==req.user.id)
+            return resp.status(403).json({message : "You are not authorized to accept this request"})
+
+        friendRequest.status = "Accepted"
+        await friendRequest.save();
+
+
+        //add each user to the other's friends array
+        //$addToSet adds an element to an array only if it they do no alraedy exist
+        await User.findById(friendRequest.sender, {
+            $addToSet  : {friends : friendRequest.recipient},
+        })
+
+        await User.findById(friendRequest.recipient , {
+            $addToSet : {friends  : friendRequest.sender},
+        })
     } catch (error) {
         
     }
