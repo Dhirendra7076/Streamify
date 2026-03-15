@@ -106,3 +106,7 @@ export async function acceptFriendRequest(req,resp) {
         resp.status(500).json({message : "Internal Server Error"})
     }
 }
+
+export async function getFriendRequest(req, resp) {
+    
+}
