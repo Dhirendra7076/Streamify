@@ -1,8 +1,12 @@
+import { Routes } from "react-router"
+
 const App = () => {
 
   return (
-    <div className='bg-red-600 h-screen'>
-      APp
+    <div className='h-screen' data-theme = "night">
+      <Routes>
+        
+      </Routes>
     </div>
   )
 }
