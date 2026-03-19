@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router"
+import { Navigate, Route, Routes } from "react-router"
 import HomePage from "./pages/HomePage"
 import Login from "./pages/Login"
 import Notifications from "./pages/Notifications"
@@ -18,25 +18,25 @@ const App = () => {
   //delete => delete, put , post
   //get => useQuery
 
-  const {data , isLoading , error} = useQuery({queryKey : ["todos"], //querykey should be array and not a string
+  const {data: authData , isLoading , error} = useQuery({queryKey : ["authUser"], //querykey should be array and not a string
     queryFn : async () => {
       const resp = await axiosInstance.get( "/auth/me");
       return resp.data     
     },
     retry: false, //since this is the auth check 
   })
-  console.log({data})
+  const authUser = authData?.user //? for if it is undefined then our code shouldn't break //in auth.routes if we say userx: req.user then it should be userx only here 
 
   return (
     <div className='h-screen' data-theme = "night">
       <Routes>
-        <Route path="/" element = {<HomePage/>}/>
-        <Route path="/login" element = {<Login/>}/>
-        <Route path = "/notifications" element = {<Notifications/>}/>
-        <Route path="/signup" element = {<SignUpPage/>}/>
-        <Route path="/onboarding" element ={<Onboarding/>}/>
-        <Route path = "/chat" element = {<ChatPage/>}/>
-        <Route path = "/call" element={<CallPage/>}/>
+        <Route path="/" element = {authUser? <HomePage/> : <Navigate to= "/login"/>}/>
+        <Route path="/login" element = {!authUser? <Navigate to = "/signup"/>: <Login/>}/>
+        <Route path = "/notifications" element = {authUser ?<Notifications/> : <Navigate to = "/login"/>}/>
+        <Route path="/signup" element = {!authUser ?<SignUpPage/> : <Navigate to = "/"/>}/>
+        <Route path="/onboarding" element ={authUser?<Onboarding/> : <Navigate to={"/login"}/>}/>
+        <Route path = "/chat" element = {authUser?<ChatPage/> : <Navigate to = "/login"/>}/>
+        <Route path = "/call" element={authUser?<CallPage/>: <Navigate to={"/login"}/>}/>
       </Routes>
 
       <Toaster/>
