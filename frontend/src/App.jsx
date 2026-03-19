@@ -31,7 +31,7 @@ const App = () => {
     <div className='h-screen' data-theme = "night">
       <Routes>
         <Route path="/" element = {authUser? <HomePage/> : <Navigate to= "/login"/>}/>
-        <Route path="/login" element = {!authUser? <Navigate to = "/signup"/>: <Login/>}/>
+        <Route path="/login" element = {!authUser? <Login/> : <Navigate to = "/"/>}/>
         <Route path = "/notifications" element = {authUser ?<Notifications/> : <Navigate to = "/login"/>}/>
         <Route path="/signup" element = {!authUser ?<SignUpPage/> : <Navigate to = "/"/>}/>
         <Route path="/onboarding" element ={authUser?<Onboarding/> : <Navigate to={"/login"}/>}/>
