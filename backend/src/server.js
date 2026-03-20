@@ -23,14 +23,15 @@ const PORT = process.env.PORT
 
 app.use(express.json()) //it tells express that If the client sends JSON data in the request body, convert it into a JavaScript object so I can use it
 app.use(cookieParser())
-app.use("/api/auth" , authRoutes)
-app.use("api/users" , userRoutes)
-app.use("/api/chats" , chatRoutes)
 app.use(cors({
     origin : "http://localhost:5173",
     credentials: true, //allows frontend to send cookies
 })
 );
+
+app.use("/api/auth" , authRoutes)
+app.use("api/users" , userRoutes)
+app.use("/api/chats" , chatRoutes)
 
 
 

@@ -7,9 +7,8 @@ import Onboarding from "./pages/Onboarding"
 import ChatPage from "./pages/ChatPage"
 import CallPage from "./pages/CallPage"
 import {Toaster} from 'react-hot-toast'
-import { useQuery } from "@tanstack/react-query"
-import axios from 'axios'
-import { axiosInstance } from "../../backend/src/lib/axios"
+import PageLoader from "./components/PageLoader"
+import useAuthUser from "./hooks/useAuthUser.js"
 
 const App = () => {
 
@@ -18,14 +17,22 @@ const App = () => {
   //delete => delete, put , post
   //get => useQuery
 
-  const {data: authData , isLoading , error} = useQuery({queryKey : ["authUser"], //querykey should be array and not a string
-    queryFn : async () => {
-      const resp = await axiosInstance.get( "/auth/me");
-      return resp.data     
-    },
-    retry: false, //since this is the auth check 
-  })
-  const authUser = authData?.user //? for if it is undefined then our code shouldn't break //in auth.routes if we say userx: req.user then it should be userx only here 
+
+  //instead of writing the below code again and again in all the page we create a custom hook and put it there
+
+  // const {data: authData , isLoading , error} = useQuery({queryKey : ["authUser"], //querykey should be array and not a string
+  //   queryFn : async () => {
+  //     const resp = await axiosInstance.get( "/auth/me"); //this async function can be shifted in the api.js file
+  //     return resp.data     
+  //   },
+  //   retry: false, //since this is the auth check 
+  // })
+  // const authUser = authData?.user //? for if it is undefined then our code shouldn't break //in auth.routes if we say userx: req.user then it should be userx only here 
+  
+  const {isLoading , authUser} =useAuthUser();
+
+  if(isLoading) return <PageLoader/>
+
 
   return (
     <div className='h-screen' data-theme = "night">

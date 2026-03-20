@@ -1,8 +1,10 @@
 import  { useState } from 'react'
 import {Video} from 'lucide-react'
 import { Link } from 'react-router'
-import { useMutation } from '@tanstack/react-query'
-import { axiosInstance } from '../../../backend/src/lib/axios'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { signup } from '../lib/api'
+
+
 
 const SignUpPage = () => {
 
@@ -12,19 +14,25 @@ const SignUpPage = () => {
     password : "",
   })
 
-  const{mutate ,error, isPending} =useMutation({
-    mutationFn: async ()=>{
-      const response = await axiosInstance.post("/auth/signup" ,signupData);
-      return response.data
-    },
+  const queryClient = useQueryClient()
+
+  const {mutate:signupMutation ,error, isPending} =useMutation({
+    mutationFn: signup,
+    // async ()=>{
+    //   const response = await axiosInstance.post("/auth/signup" ,signupData);
+    //   return response.data
+    // }, instead of signup this was after mutationFn:
     onSuccess: ()=> {
-      
+      queryClient.invalidateQueries({queryKey: ["authUser"]})
     }
   })
 
   const handleSignUp=(e)=>{
     e.preventDefault()
+    signupMutation(signupData)
   }
+
+  
   return (
     <div className='h-screen flex items-center justify-center p-4 sm:p-6 md: p-8' data-theme= "luxury">
       <div className='border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto 
@@ -40,6 +48,13 @@ const SignUpPage = () => {
              Streamify
             </span>
           </div>
+
+          {/*Error message if any*/ }
+          {error && (
+            <div className='alert alert-error mb-4'>
+              <span>{error.response.data.message}</span>
+              </div>
+          )}
 
           <div className='w-full'>
             <form onSubmit={handleSignUp}>
@@ -94,7 +109,7 @@ const SignUpPage = () => {
                         </p>
                   </div>
                   <div className='form-control'>
-                    <label className='label curson-pointer justify-start gap-2'>
+                    <label className='label cursor-pointer justify-start gap-2'>
                       <input type='checkbox' className='checkbox checkbox-sm' required/>
                       <span className='text-xs leading-tight'>
                         I agree to the {""}
@@ -106,7 +121,14 @@ const SignUpPage = () => {
                 </div>
 
                 <button className='btn btn-primary w-full' type='submit'> 
-                    Create Account
+                    {isPending ? (
+                      <>
+                      <span className=' loading loading-spinner loading-xs'></span>
+                      Creating Account....
+                      </>
+                    ): (
+                      "Create Account"
+                    )}
                 </button>
 
                 <div className='text-center mt-4'>
