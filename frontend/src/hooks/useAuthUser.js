@@ -3,7 +3,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getAuthUser } from '../lib/api'
 
-const useAuthUser = () => {
+
 
     const useAuthUser = () =>{
         const authUser = useQuery({
@@ -11,10 +11,12 @@ const useAuthUser = () => {
             queryFn: getAuthUser,
             retry: false , //auth check
         })
-    }
-  return (
-   {isloading: authUser.isloading , authUser: authUser.data?.user}
+
+        return (
+   {isLoading: authUser.isLoading , authUser: authUser.data?.user}
   )
-}
+
+    }
+  
 
 export default useAuthUser

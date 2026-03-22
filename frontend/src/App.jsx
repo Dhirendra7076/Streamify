@@ -30,6 +30,8 @@ const App = () => {
   // const authUser = authData?.user //? for if it is undefined then our code shouldn't break //in auth.routes if we say userx: req.user then it should be userx only here 
   
   const {isLoading , authUser} =useAuthUser();
+  const isAuthenticated = Boolean(authUser)
+  const isOnboarded = authUser?.isOnboarded
 
   if(isLoading) return <PageLoader/>
 
@@ -37,13 +39,13 @@ const App = () => {
   return (
     <div className='h-screen' data-theme = "night">
       <Routes>
-        <Route path="/" element = {authUser? <HomePage/> : <Navigate to= "/login"/>}/>
-        <Route path="/login" element = {!authUser? <Login/> : <Navigate to = "/"/>}/>
-        <Route path = "/notifications" element = {authUser ?<Notifications/> : <Navigate to = "/login"/>}/>
-        <Route path="/signup" element = {!authUser ?<SignUpPage/> : <Navigate to = "/"/>}/>
-        <Route path="/onboarding" element ={authUser?<Onboarding/> : <Navigate to={"/login"}/>}/>
-        <Route path = "/chat" element = {authUser?<ChatPage/> : <Navigate to = "/login"/>}/>
-        <Route path = "/call" element={authUser?<CallPage/>: <Navigate to={"/login"}/>}/>
+        <Route path="/" element = {isAuthenticated && isOnboarded? <HomePage/> : <Navigate to= {isAuthenticated? "/login" : "/onboarding"}/>}/>
+        <Route path="/login" element = {!isAuthenticated? <Login/> : <Navigate to = "/"/>}/>
+        <Route path = "/notifications" element = {isAuthenticated ?<Notifications/> : <Navigate to = "/login"/>}/>
+        <Route path="/signup" element = {isAuthenticated ?<SignUpPage/> : <Navigate to = "/"/>}/>
+        <Route path="/onboarding" element ={isAuthenticated?<Onboarding/> : <Navigate to={"/login"}/>}/>
+        <Route path = "/chat" element = {isAuthenticated?<ChatPage/> : <Navigate to = "/login"/>}/>
+        <Route path = "/call" element={isAuthenticated?<CallPage/>: <Navigate to={"/login"}/>}/>
       </Routes>
 
       <Toaster/>
