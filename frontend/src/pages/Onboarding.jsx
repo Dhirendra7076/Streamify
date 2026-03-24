@@ -97,6 +97,15 @@ const Onboarding = () => {
               </div>
 
               {/*Languages */}
+              <div className='grid grid-cols-1 md-grid-cols-2 gap-4'>
+                {/*Native language*/}
+                <div className='form-control'>
+                  <label className='label'>
+                    <span className='label-text'>Native language</span>
+                  </label>
+                  
+                </div>
+              </div>
           </form>
         </div>
 
