@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import useAuthUser from '../hooks/useAuthUser'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CameraIcon } from 'lucide-react';
+import { CameraIcon, ShuffleIcon } from 'lucide-react';
 
 const Onboarding = () => {
 
@@ -30,6 +30,10 @@ const Onboarding = () => {
     onboardingMutation(formState)
   }
 
+  const handleRandomAvatar = ()=> {
+
+  }
+
   return (
     <div className='min-h-screen bg-base-100 flex items-center justify-center p-4'>
       <div className='card bg-base-200 w-full max-w-3xl shadow-xl'>
@@ -52,7 +56,47 @@ const Onboarding = () => {
                   </div>
                 )}
               </div>
+
+              {/* generate random avatar btn*/}
+              <div className='flex items-center gap-2'>
+                <button type='button' onClick={handleRandomAvatar} className='btn btn-accent'>
+                  <ShuffleIcon className='size-4 mr-2'/>
+                  Generate Random Avatar
+                </button>
+              </div>
+
+ 
             </div>
+                         {/* FUll Name*/}
+              <div className='form-control'>
+                <label className='label'>
+                  <span className='label-text'>Full Name</span>
+                </label>
+                <input 
+                type='text'
+                name='FullName'
+                value={formState.fullName}
+                onChange={(e)=> setFormState({...formState , fullName: e.target.value})}
+                className='input input-bordered w-full'
+                placeholder='John Wick'
+                />
+              </div>
+
+                {/*BIO */ }
+              <div className='form-control'>
+                <label className='label'>
+                  <span className='label-text'>Bio</span>
+                </label>
+                <textarea 
+                name='bio'
+                value={formState.bio}
+                onChange={(e)=>formState({...formState , bio: e.target.value})}
+                className='textarea  textarea-bordered h-24'
+                placeholder='Tell us about yourself'
+                />
+              </div>
+
+              {/*Languages */}
           </form>
         </div>
 
