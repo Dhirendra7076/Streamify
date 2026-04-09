@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import useAuthUser from '../hooks/useAuthUser'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CameraIcon, ShuffleIcon } from 'lucide-react';
+import { LANGUAGES } from '../constants';
 
 const Onboarding = () => {
 
@@ -103,7 +104,19 @@ const Onboarding = () => {
                   <label className='label'>
                     <span className='label-text'>Native language</span>
                   </label>
-                  
+                  <select 
+                  name='nativeLanguage'
+                  value={formState.nativeLanguage}
+                  onChange={(e)=>formState({...formState , nativeLanguage: e.target.value})}
+                  className='select select-bordered w-full'
+                  >
+                    <option value={""}>Select your native language</option>
+                    {LANGUAGES.map((lang)=>(
+                      <option key={`native-${lang}`}value={lang.toLowerCase()}>
+                        {lang}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
           </form>
