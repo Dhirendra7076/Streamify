@@ -31,7 +31,11 @@ export async function signup(req,resp){
 
         const existingUser = await User.findOne({email})
         if(existingUser){
-            return resp.status(400).json({message: `Email already exists : ${existingUser}`})
+            // FIX: Removed `${existingUser}` from the error message. 
+            // Previously, this converted the entire database document into a string 
+            // and sent it to the frontend, resulting in an ugly alert bubble with sensitive backend data.
+            // Now, it simply returns a clean, user-friendly message.
+            return resp.status(400).json({message: "Email already exists"})
         }
 
         const idx = Math.floor(Math.random()*100) +1;
@@ -91,7 +95,7 @@ export async function login(req,resp){
         const isPasswordCorrect = await user.matchPassword(password)
         if(!isPasswordCorrect) return resp.status(401).json({message: "Check the credentials"})
 
-        const token = jwt.sign({id: user._id} , process.env.JWT_SECRET_KEY , {
+        const token = jwt.sign({userId: user._id} , process.env.JWT_SECRET_KEY , {
             expiresIn: "7d"
         })
 

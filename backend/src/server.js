@@ -26,8 +26,7 @@ app.use(cookieParser())
 app.use(cors({
     origin : "http://localhost:5173",
     credentials: true, //allows frontend to send cookies
-})
-);
+}));
 
 app.use("/api/auth" , authRoutes)
 app.use("api/users" , userRoutes)
