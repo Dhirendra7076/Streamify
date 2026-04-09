@@ -34,7 +34,9 @@ const Onboarding = () => {
   }
 
   const handleRandomAvatar = ()=> {
-
+    const randomSeed = Math.floor(Math.random() * 10000);
+    const newAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${randomSeed}`;
+    setFormState({ ...formState, profilePic: newAvatar });
   }
 
   return (
@@ -50,7 +52,7 @@ const Onboarding = () => {
                 {formState.profilePic? (
                   <img 
                   src = {formState.profilePic}
-                  alt = 'Profile Prview'
+                  alt = 'Profile Preview'
                   className='w-full h-full object-cover'
                   />
                 ): (
