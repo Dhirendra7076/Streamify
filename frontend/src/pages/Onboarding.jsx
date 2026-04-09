@@ -107,7 +107,7 @@ const Onboarding = () => {
                   <select 
                   name='nativeLanguage'
                   value={formState.nativeLanguage}
-                  onChange={(e)=>formState({...formState , nativeLanguage: e.target.value})}
+                  onChange={(e)=>setFormState({...formState , nativeLanguage: e.target.value})}
                   className='select select-bordered w-full'
                   >
                     <option value={""}>Select your native language</option>

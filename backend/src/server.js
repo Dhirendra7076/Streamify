@@ -39,4 +39,4 @@ app.listen(PORT , ()=>{
     console.log(`Server is running on port ${PORT}`);
     console.log("Connected to DB: " , mongoose.connection.name)
     connectDB()
-})
+})
