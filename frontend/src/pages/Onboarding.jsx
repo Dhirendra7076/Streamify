@@ -1,39 +1,39 @@
 import React, { useState } from 'react'
 import useAuthUser from '../hooks/useAuthUser'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CameraIcon, ShuffleIcon } from 'lucide-react';
+import { CameraIcon, MapPinIcon, ShuffleIcon } from 'lucide-react';
 import { LANGUAGES } from '../constants';
 import { completeOnboarding } from '../lib/api';
 import toast from 'react-hot-toast';
 
 const Onboarding = () => {
 
-  const {authUser} = useAuthUser();
+  const { authUser } = useAuthUser();
   const queryClient = useQueryClient();
 
-  const [formState , setFormState] = useState({
+  const [formState, setFormState] = useState({
     fullName: authUser?.fullName || "",
     bio: authUser?.bio || "",
-    nativeLanguage : authUser.nativeLanguage || "",
-    learningLanguage : authUser.learningLanguage || "",
-    location : authUser?.location || "",
+    nativeLanguage: authUser.nativeLanguage || "",
+    learningLanguage: authUser.learningLanguage || "",
+    location: authUser?.location || "",
     profilePic: authUser?.profilePic || "",
   })
 
-  const {mutate : onboardingMutation , isPending} = useMutation({
-    mutationFn: completeOnboarding , 
-    onSuccess: ()=> {
+  const { mutate: onboardingMutation, isPending } = useMutation({
+    mutationFn: completeOnboarding,
+    onSuccess: () => {
       toast.success("Profile onboarded successfully")
     }
   })
 
 
-  const handleSubmit= (e)=>{
+  const handleSubmit = (e) => {
     e.preventDefault()
     onboardingMutation(formState)
   }
 
-  const handleRandomAvatar = ()=> {
+  const handleRandomAvatar = () => {
     const randomSeed = Math.floor(Math.random() * 10000);
     const newAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${randomSeed}`;
     setFormState({ ...formState, profilePic: newAvatar });
@@ -48,16 +48,16 @@ const Onboarding = () => {
             {/* PROFILE PIC CONTAINER*/}
             <div className='flex flex-col items-center justify-center space-y-4'>
               {/* IMAGE PREVIEW*/}
-              <div className= "size-32 rounded-full bg-base-300 overflow-hidden">
-                {formState.profilePic? (
-                  <img 
-                  src = {formState.profilePic}
-                  alt = 'Profile Preview'
-                  className='w-full h-full object-cover'
+              <div className="size-32 rounded-full bg-base-300 overflow-hidden">
+                {formState.profilePic ? (
+                  <img
+                    src={formState.profilePic}
+                    alt='Profile Preview'
+                    className='w-full h-full object-cover'
                   />
-                ): (
+                ) : (
                   <div className='flex items-center justify-center h-full'>
-                    <CameraIcon className='size-12 text-base-content opacity-40'/>
+                    <CameraIcon className='size-12 text-base-content opacity-40' />
                   </div>
                 )}
               </div>
@@ -65,69 +65,109 @@ const Onboarding = () => {
               {/* generate random avatar btn*/}
               <div className='flex items-center gap-2'>
                 <button type='button' onClick={handleRandomAvatar} className='btn btn-accent'>
-                  <ShuffleIcon className='size-4 mr-2'/>
+                  <ShuffleIcon className='size-4 mr-2' />
                   Generate Random Avatar
                 </button>
               </div>
 
- 
+
             </div>
-                         {/* FUll Name*/}
-              <div className='form-control'>
-                <label className='label'>
-                  <span className='label-text'>Full Name</span>
-                </label>
-                <input 
+            {/* FUll Name*/}
+            <div className='form-control'>
+              <label className='label'>
+                <span className='label-text'>Full Name</span>
+              </label>
+              <input
                 type='text'
                 name='FullName'
                 value={formState.fullName}
-                onChange={(e)=> setFormState({...formState , fullName: e.target.value})}
+                onChange={(e) => setFormState({ ...formState, fullName: e.target.value })}
                 className='input input-bordered w-full'
                 placeholder='John Wick'
-                />
-              </div>
+              />
+            </div>
 
-                {/*BIO */ }
-              <div className='form-control'>
-                <label className='label'>
-                  <span className='label-text'>Bio</span>
-                </label>
-                <textarea 
+            {/*BIO */}
+            <div className='form-control'>
+              <label className='label'>
+                <span className='label-text'>Bio</span>
+              </label>
+              <textarea
                 name='bio'
                 value={formState.bio}
-                onChange={(e)=>setFormState({...formState , bio: e.target.value})}
-                className='textarea  textarea-bordered h-24'
+                onChange={(e) => setFormState({ ...formState, bio: e.target.value })}
+                className='textarea  textarea-bordered h-24 w-full'
                 placeholder='Tell us about yourself'
-                />
-              </div>
+              />
+            </div>
 
-              {/*Languages */}
-              <div className='grid grid-cols-1 md-grid-cols-2 gap-4'>
-                {/*Native language*/}
-                <div className='form-control'>
-                  <label className='label'>
-                    <span className='label-text'>Native language</span>
-                  </label>
-                  <select 
+            {/*Languages */}
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+              {/*Native language*/}
+              <div className='form-control'>
+                <label className='label'>
+                  <span className='label-text'>Native language</span>
+                </label>
+                <select
                   name='nativeLanguage'
                   value={formState.nativeLanguage}
-                  onChange={(e)=>setFormState({...formState , nativeLanguage: e.target.value})}
-                  className='select select-bordered w-full'
+                  onChange={(e) => setFormState({ ...formState, nativeLanguage: e.target.value })}
+                  className='select select-bordered'
+                >
+                  <option value={""}>Select your native language</option>
+                  {LANGUAGES.map((lang) => (
+                    <option key={`native-${lang}`} value={lang.toLowerCase()}>
+                      {lang}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/*Learning language*/}
+              <div className='form-control'>
+                <label className='label'>
+                  <span className='label-text'>Learning Language</span>
+                </label>
+                <select 
+                  name='Learning Language'
+                  value={formState.learningLanguage}
+                  onChange={(e)=> setFormState({...formState , learningLanguage: e.target.value})}
+                  className='select select-bordered'
                   >
-                    <option value={""}>Select your native language</option>
-                    {LANGUAGES.map((lang)=>(
-                      <option key={`native-${lang}`}value={lang.toLowerCase()}>
+                    <option value={""}>Select your Learning Language</option>
+                    {LANGUAGES.map((lang)=> (
+                      <option key={`learning-${lang}`} value={lang.toLowerCase()}>
                         {lang}
                       </option>
-                    ))}
+                    )  )}
                   </select>
-                </div>
               </div>
+
+            </div>
+
+            <div className='form-control'>
+              <label className='label'>
+                <span className='label-text'>Location</span>
+              </label>
+              <div className='relative'>
+                <MapPinIcon
+                        className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-base-content opacity-70"
+                />
+                <input 
+                type='text'
+                name='Location'
+                value={formState.location}
+                onChange={(e)=> setFormState({...formState ,location: e.target.value})}
+                className='input input-bordered w-full pl-10'
+                placeholder='City , Country'
+                />
+              </div>
+            </div>
           </form>
         </div>
 
       </div>
-      
+
     </div>
   )
 }
