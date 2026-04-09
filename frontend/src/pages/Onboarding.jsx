@@ -3,6 +3,8 @@ import useAuthUser from '../hooks/useAuthUser'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CameraIcon, ShuffleIcon } from 'lucide-react';
 import { LANGUAGES } from '../constants';
+import { completeOnboarding } from '../lib/api';
+import toast from 'react-hot-toast';
 
 const Onboarding = () => {
 
@@ -91,7 +93,7 @@ const Onboarding = () => {
                 <textarea 
                 name='bio'
                 value={formState.bio}
-                onChange={(e)=>formState({...formState , bio: e.target.value})}
+                onChange={(e)=>setFormState({...formState , bio: e.target.value})}
                 className='textarea  textarea-bordered h-24'
                 placeholder='Tell us about yourself'
                 />
