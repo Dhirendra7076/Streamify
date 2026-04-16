@@ -18,5 +18,5 @@ import { getAuthUser } from '../lib/api'
 
     }
   
-
+ 
 export default useAuthUser

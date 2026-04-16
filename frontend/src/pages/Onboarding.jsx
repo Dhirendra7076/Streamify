@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import useAuthUser from '../hooks/useAuthUser'
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CameraIcon, MapPinIcon, ShuffleIcon } from 'lucide-react';
+import { CameraIcon, LoaderPinwheelIcon, MapPinIcon, ShipWheelIcon, ShuffleIcon } from 'lucide-react';
 import { LANGUAGES } from '../constants';
 import { completeOnboarding } from '../lib/api';
 import toast from 'react-hot-toast';
@@ -24,7 +24,15 @@ const Onboarding = () => {
     mutationFn: completeOnboarding,
     onSuccess: () => {
       toast.success("Profile onboarded successfully")
-    }
+    },
+    
+      onError: (error)=> {
+        console.dir(error); //Go to console under that go to response -> data-> message
+        toast.error(error?.response?.data?.message)
+
+      }
+      
+    
   })
 
 
@@ -37,6 +45,7 @@ const Onboarding = () => {
     const randomSeed = Math.floor(Math.random() * 10000);
     const newAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${randomSeed}`;
     setFormState({ ...formState, profilePic: newAvatar });
+    toast.success("Avatar Changed Successfully")
   }
 
   return (
@@ -145,13 +154,15 @@ const Onboarding = () => {
 
             </div>
 
+            {/*Location*/}
+
             <div className='form-control'>
               <label className='label'>
                 <span className='label-text'>Location</span>
               </label>
               <div className='relative'>
                 <MapPinIcon
-                        className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-base-content opacity-70"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 z-10 size-5 text-base-content opacity-70"
                 />
                 <input 
                 type='text'
@@ -163,6 +174,22 @@ const Onboarding = () => {
                 />
               </div>
             </div>
+
+
+            {/*Submit*/}
+            <button className='btn btn-primary w-full' disabled={isPending} type='submit'>
+              {!isPending? (
+                <>
+                  <ShipWheelIcon className='size-5 mr-2'/>
+                  Complete Onboarding
+                </>
+              ) : (
+                <>
+                  <LoaderPinwheelIcon className='animate-spin size-5 mr-2'/>
+                  Onboarding...
+                </>
+              )}
+            </button>
           </form>
         </div>
 

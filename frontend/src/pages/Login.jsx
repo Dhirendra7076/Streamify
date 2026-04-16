@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Video } from 'lucide-react';
-import { Link } from 'react-router'; // or react-router-dom depending on what version they are using, wait SignUp uses react-router
+import {Link} from 'react-router'; // or react-router-dom depending on what version they are using, wait SignUp uses react-router
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { login } from '../lib/api';
 
