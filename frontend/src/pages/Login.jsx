@@ -1,16 +1,20 @@
 import { useState } from 'react';
-import { Video } from 'lucide-react';
+import { Eye, EyeOff, Video } from 'lucide-react';
 import {Link} from 'react-router'; // or react-router-dom depending on what version they are using, wait SignUp uses react-router
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { login } from '../lib/api';
 
+
+   
 const Login = () => {
   const [loginData, setLoginData] = useState({
     email: '',
     password: '',
   });
-
-  const queryClient = useQueryClient();
+  
+   const [showPassword , setShowPassword] = useState(false)
+  
+   const queryClient = useQueryClient();
 
   const { mutate: loginMutation, error, isPending } = useMutation({
     mutationFn: login,
@@ -33,7 +37,7 @@ const Login = () => {
           {/* LOGO */}
           <div className='mb-8 flex items-center justify-start gap-2'>
             <Video className='w-9 h-9 text-primary' />
-            <span className='text-3xl font-bold font-mono bg-clip-text text-transparent bg-gradient-to-r from-primary
+            <span className='text-3xl font-bold font-mono bg-clip-text text-transparent bg-linear-to-r from-primary
             to-secondary tracking-wider'>
               Streamify
             </span>
@@ -76,13 +80,28 @@ const Login = () => {
                     <label className='label'>
                       <span className='label-text'>Password</span>
                     </label>
-                    <input type='password'
-                      placeholder='**********'
-                      className='input input-bordered w-full'
-                      value={loginData.password}
-                      onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+
+                    <div className='relative'>
+                      <input 
+                        type= {showPassword ? "text" : "password"}
+                        placeholder='***********'
+                        className='input input-bordered w-full pr-10'
+                        value={loginData.password}
+                        onChange={(e)=> 
+                          setLoginData({...loginData , password : e.target.value})
+                      }
                       required
-                    />
+                      />
+
+                      <button 
+                        type='button'
+                        onClick={()=> setShowPassword(prev=> !prev )}
+                        className='absolute right-3 top-1/2 -translate-y-1/2 text-sm'
+                        >
+                          {showPassword ? <EyeOff size={18}/> : <Eye size={18}/> }
+                        </button>
+                    </div>
+
                   </div>
                 </div>
 
