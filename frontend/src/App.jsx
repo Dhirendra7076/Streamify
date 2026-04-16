@@ -9,6 +9,8 @@ import CallPage from "./pages/CallPage"
 import {Toaster} from 'react-hot-toast'
 import PageLoader from "./components/PageLoader"
 import useAuthUser from "./hooks/useAuthUser.js"
+import Layout from "./components/Layout.jsx"
+import { Home } from "lucide-react"
 
 const App = () => {
 
@@ -39,7 +41,16 @@ const App = () => {
   return (
     <div className='h-screen' data-theme = "night">
       <Routes>
-        <Route path="/" element = {isAuthenticated && isOnboarded? <HomePage/> : <Navigate to= {isAuthenticated? "/login" : "/onboarding"}/>}/>
+        <Route path="/" element = 
+          {isAuthenticated && isOnboarded? (
+            <Layout>
+              <HomePage/>
+            </Layout>
+        ): (
+          <Navigate to={!isAuthenticated ? '/login' : '/onboarding'}/>
+        )
+      
+      }/>
         <Route path="/login" element = {!isAuthenticated? <Login/> : <Navigate to = {
           isOnboarded? '/' : '/onboarding'
         }/>
