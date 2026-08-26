@@ -3,6 +3,7 @@ import { Eye, EyeOff, Video } from 'lucide-react';
 import {Link} from 'react-router'; // or react-router-dom depending on what version they are using, wait SignUp uses react-router
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { login } from '../lib/api';
+import useLogin from '../hooks/useLogin';
 
 
    
@@ -14,14 +15,17 @@ const Login = () => {
   
    const [showPassword , setShowPassword] = useState(false)
   
-   const queryClient = useQueryClient();
+  //  const queryClient = useQueryClient();
 
-  const { mutate: loginMutation, error, isPending } = useMutation({
-    mutationFn: login,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-  });
+  // const { mutate: loginMutation, error, isPending } = useMutation({
+  //   mutationFn: login,
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["authUser"] });
+  //   },
+  // });
+  //This whole above part shifted to useLogin.js file to make it a custom hook
+
+  const {isPending , error, loginMutation} = useLogin();
 
   const handleLogin = (e) => {
     e.preventDefault();

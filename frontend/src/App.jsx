@@ -43,7 +43,7 @@ const App = () => {
       <Routes>
         <Route path="/" element = 
           {isAuthenticated && isOnboarded? (
-            <Layout>
+            <Layout showSidebar= {true}>
               <HomePage/>
             </Layout>
         ): (

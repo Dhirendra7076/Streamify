@@ -3,6 +3,7 @@ import {Eye, EyeClosedIcon, Video} from 'lucide-react'
 import { Link } from 'react-router'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { signup } from '../lib/api'
+import useSignup from '../hooks/useSignup'
 
 
 
@@ -16,18 +17,21 @@ const SignUpPage = () => {
 
   const[showPassword , setShowPassword] = useState(false)
 
-  const queryClient = useQueryClient()
+  // const queryClient = useQueryClient()
 
-  const {mutate:signupMutation ,error, isPending} =useMutation({
-    mutationFn: signup,
-    // async ()=>{
-    //   const response = await axiosInstance.post("/auth/signup" ,signupData);
-    //   return response.data
-    // }, instead of signup this was after mutationFn:
-    onSuccess: ()=> {
-      queryClient.invalidateQueries({queryKey: ["authUser"]})
-    }
-  })
+  // const {mutate:signupMutation ,error, isPending} =useMutation({
+  //   mutationFn: signup,
+  //   // async ()=>{
+  //   //   const response = await axiosInstance.post("/auth/signup" ,signupData);
+  //   //   return response.data
+  //   // }, instead of signup this was after mutationFn:
+  //   onSuccess: ()=> {
+  //     queryClient.invalidateQueries({queryKey: ["authUser"]})
+  //   }
+  // })
+  //Created a custom hook for this
+
+  const{isPending , error , SignupMutation}=useSignup();
 
   const handleSignUp=(e)=>{
     e.preventDefault()
